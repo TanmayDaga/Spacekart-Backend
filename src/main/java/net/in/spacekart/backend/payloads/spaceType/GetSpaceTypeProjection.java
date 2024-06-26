@@ -3,8 +3,9 @@ package net.in.spacekart.backend.payloads.spaceType;
 import lombok.Data;
 
 @Data
-public class GuestSpaceTypeDto {
+public class GetSpaceTypeProjection {
 
     private String name;
+    private String imageUrl;
 
 }

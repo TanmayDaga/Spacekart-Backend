@@ -24,7 +24,7 @@ public class SpaceType {
 
 
     @OneToOne(cascade =  CascadeType.ALL)
-    private Media ImageUrl;
+    private Media imageUrl;
 
 
 

@@ -2,7 +2,7 @@ package net.in.spacekart.backend.services.entityServices;
 
 import jakarta.transaction.Transactional;
 import net.in.spacekart.backend.database.entities.SpaceType;
-import net.in.spacekart.backend.payloads.spaceType.GuestSpaceTypeDto;
+import net.in.spacekart.backend.payloads.spaceType.GetSpaceTypeProjection;
 import net.in.spacekart.backend.repositories.SpaceTypeRepository;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -26,15 +26,15 @@ public class SpaceTypeService {
 
 
     @Transactional
-    public void save(GuestSpaceTypeDto spaceType) {
+    public void save(GetSpaceTypeProjection spaceType) {
         SpaceType spaceTypeEntity = modelMapper.map(spaceType, SpaceType.class);
         spaceTypeRepository.save(spaceTypeEntity);
     }
 
     @Transactional
-    public List<GuestSpaceTypeDto> getAll() {
+    public List<GetSpaceTypeProjection> getAll() {
         List<SpaceType> spaceTypes = spaceTypeRepository.findAll();
-        return modelMapper.map(spaceTypes, (new TypeToken<List<GuestSpaceTypeDto>>() {}).getType());
+        return modelMapper.map(spaceTypes, (new TypeToken<List<GetSpaceTypeProjection>>() {}).getType());
 
     }
 

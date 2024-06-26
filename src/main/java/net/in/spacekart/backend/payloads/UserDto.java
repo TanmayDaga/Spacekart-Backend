@@ -21,7 +21,7 @@ import java.util.List;
 public class UserDto {
 
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long id;
 
 
@@ -31,7 +31,7 @@ public class UserDto {
 
     private String lastName;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String username;
 
 

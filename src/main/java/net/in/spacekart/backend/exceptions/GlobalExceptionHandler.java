@@ -52,10 +52,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<String>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler({RuntimeException.class})
-    public ResponseEntity<String> runtimeException(RuntimeException ex){
-        return new ResponseEntity<String>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
-    }
 
 
 }

@@ -63,7 +63,7 @@ public class BackendApplication {
         ModelMapper modelMapper = new ModelMapper();
 
         Converter<String, OffsetDateTime> StringToOffsetDateTimeConverter = mappingContext -> OffsetDateTime.parse(mappingContext.getSource(), dateTimeFormatter);
-        Converter<OffsetDateTime, String> OffsetDateTimeToStringConverter = mappingContext -> mappingContext.getSource().format(dateTimeFormatter);
+        Converter<OffsetDateTime, String> OffsetDateTimeToStringConverter = mappingContext -> mappingContext.getSource().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
         Converter<String, OffsetTime> StringToOffsetTimeConverter = mappingContext -> OffsetTime.parse(mappingContext.getSource(), timeFormatter);
         Converter<OffsetTime, String> OffsetTimeToStringConverter = mappingContext -> mappingContext.getSource().format(timeFormatter);
 

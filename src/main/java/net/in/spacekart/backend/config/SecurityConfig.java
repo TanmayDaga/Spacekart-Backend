@@ -43,7 +43,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(request -> {
-            request.requestMatchers("/signup", "/login","/api/v1/spacetypes").permitAll();
+            request.requestMatchers("/signup", "/login","/api/v1/spacetypes","/users").permitAll();
             request.anyRequest().authenticated();
 
         });

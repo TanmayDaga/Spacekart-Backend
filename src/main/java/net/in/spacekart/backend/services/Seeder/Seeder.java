@@ -2,7 +2,7 @@ package net.in.spacekart.backend.services.Seeder;
 
 import net.in.spacekart.backend.database.entities.Address;
 import net.in.spacekart.backend.database.enums.Role;
-import net.in.spacekart.backend.payloads.spaceType.GuestSpaceTypeDto;
+import net.in.spacekart.backend.payloads.spaceType.GetSpaceTypeProjection;
 import net.in.spacekart.backend.payloads.UserDto;
 import net.in.spacekart.backend.services.entityServices.SpaceTypeService;
 import net.in.spacekart.backend.services.entityServices.UserService;
@@ -62,15 +62,15 @@ public class Seeder {
             userService.saveUser(userDto1, Role.ROLE_USER);
             userService .saveUser(userDto2, Role.ROLE_ADMIN);
 
-            List<GuestSpaceTypeDto> guestSpaceTypeDtos = new ArrayList<>();
+            List<GetSpaceTypeProjection> getSpaceTypeProjections = new ArrayList<>();
 
             for (int i = 1; i <= 5; i++) {
-                GuestSpaceTypeDto guestSpaceTypeDto = new GuestSpaceTypeDto();
-                guestSpaceTypeDto.setName("Entity " + i);
-                guestSpaceTypeDtos.add(guestSpaceTypeDto);
+                GetSpaceTypeProjection getSpaceTypeProjection = new GetSpaceTypeProjection();
+                getSpaceTypeProjection.setName("Entity " + i);
+                getSpaceTypeProjections.add(getSpaceTypeProjection);
             }
-            for (GuestSpaceTypeDto guestSpaceTypeDto : guestSpaceTypeDtos) {
-                spaceTypeService.save(guestSpaceTypeDto);
+            for (GetSpaceTypeProjection getSpaceTypeProjection : getSpaceTypeProjections) {
+                spaceTypeService.save(getSpaceTypeProjection);
             }
 
         };
