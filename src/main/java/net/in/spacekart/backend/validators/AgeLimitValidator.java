@@ -4,7 +4,6 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import net.in.spacekart.backend.constraints.AgeLimit;
 
-
 import java.time.OffsetDateTime;
 
 public class AgeLimitValidator implements ConstraintValidator<AgeLimit, OffsetDateTime> {
@@ -16,14 +15,13 @@ public class AgeLimitValidator implements ConstraintValidator<AgeLimit, OffsetDa
     }
 
 
-
     @Override
     public boolean isValid(OffsetDateTime birthDate, ConstraintValidatorContext constraintValidatorContext) {
-        if(birthDate == null){
+        if (birthDate == null) {
             return false;
         }
         OffsetDateTime today = OffsetDateTime.now();
-       OffsetDateTime minimumAgeYearsAgo = today.minusYears(this.minimumAge);
+        OffsetDateTime minimumAgeYearsAgo = today.minusYears(this.minimumAge);
         return !minimumAgeYearsAgo.isBefore(birthDate);
     }
 }

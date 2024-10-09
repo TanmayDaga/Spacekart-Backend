@@ -1,9 +1,33 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon files
+Icon?
+._*
+
+# macOS specific metadata files
+.Spotlight-V100
+.Trashes
+._*
+
+# Linux
+*~
+
+# Temporary files
+.nfs*
+
+# Swap files
+*.swp
+*.swo
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+.env
 ### STS ###
 .apt_generated
 .classpath
@@ -31,3 +55,4 @@ build/
 
 ### VS Code ###
 .vscode/
+**/application.properties

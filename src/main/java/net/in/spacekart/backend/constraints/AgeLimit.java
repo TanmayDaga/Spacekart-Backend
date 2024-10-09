@@ -12,9 +12,12 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = AgeLimitValidator.class)
-public @interface AgeLimit{
+public @interface AgeLimit {
     int minimumAge() default 18;
+
     String message() default "User must be at least 18 years old";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

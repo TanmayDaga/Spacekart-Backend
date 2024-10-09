@@ -8,7 +8,6 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-
 import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
@@ -21,7 +20,7 @@ public class JwtService {
 
     public static final String SECRET = "357638792F423F4428472B4B6250655368566D597133743677397A2443264629";
 
-    public String extractUsername(String token) {
+    public String extractPayload(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -43,25 +42,23 @@ public class JwtService {
         return extractExpiration(token).before(new Date());
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    public Boolean validateToken(String token, String newPayload){
+        final String payload = extractPayload(token);
+        return (payload.equals(newPayload) && !isTokenExpired(token));
     }
 
 
-
-    public String GenerateToken(String username){
+    public String GenerateToken(String payload) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, username);
+        return createToken(claims, payload);
     }
 
 
-
-    private String createToken(Map<String, Object> claims, String username) {
+    private String createToken(Map<String, Object> claims, String payload) {
 
         return Jwts.builder()
                 .claims(claims)
-                .subject(username)
+                .subject(payload)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();

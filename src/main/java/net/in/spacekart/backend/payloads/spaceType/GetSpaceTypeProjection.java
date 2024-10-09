@@ -8,4 +8,5 @@ public class GetSpaceTypeProjection {
     private String name;
     private String imageUrl;
 
+
 }

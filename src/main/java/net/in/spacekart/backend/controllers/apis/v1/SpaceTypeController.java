@@ -1,17 +1,15 @@
 package net.in.spacekart.backend.controllers.apis.v1;
 
-import jakarta.transaction.Transactional;
-import net.in.spacekart.backend.payloads.spaceType.GetSpaceTypeProjection;
+import jakarta.validation.Valid;
+import net.in.spacekart.backend.payloads.delete.spacetype.SpaceTypeDeleteDto;
+import net.in.spacekart.backend.payloads.post.spaceType.SpaceTypeCreateDto;
+import net.in.spacekart.backend.payloads.put.SpaceTypeUpdateDto;
 import net.in.spacekart.backend.services.UtilsService;
 import net.in.spacekart.backend.services.entityServices.SpaceTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @RestController
@@ -29,19 +27,33 @@ public class SpaceTypeController {
     }
 
 
-    @GetMapping
-    public ResponseEntity<List<GetSpaceTypeProjection>> findAllSpaceTypes(Authentication auth) {
-
-        return new ResponseEntity<List<GetSpaceTypeProjection>>(spaceTypeService.getAll(), HttpStatus.FOUND);
+    @PostMapping
+    public ResponseEntity<?> saveSpaceType(@Valid @ModelAttribute SpaceTypeCreateDto spaceTypeDto) {
+        spaceTypeService.save(spaceTypeDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PreAuthorize("isAuthenticated() && hasRole('ADMIN')")
-    @Transactional
-    @PostMapping
-    public ResponseEntity<String> saveSpaceType(@RequestBody GetSpaceTypeProjection spaceType) {
+    @GetMapping
+    public ResponseEntity<?> listSpaceTypes() {
+        return new ResponseEntity<>(spaceTypeService.findAll(), HttpStatus.OK);
+    }
 
-        spaceTypeService.save(spaceType);
-        return new ResponseEntity<String>("submitted successfully", HttpStatus.CREATED);
+
+    @DeleteMapping
+    public ResponseEntity<?> delete(@ModelAttribute @Valid SpaceTypeDeleteDto spaceTypeDto) {
+        spaceTypeService.delete(spaceTypeDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping
+    public ResponseEntity<?> update(@ModelAttribute @Valid SpaceTypeUpdateDto spaceTypeDto) {
+        spaceTypeService.update(spaceTypeDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/names")
+    public ResponseEntity<?> getSpaceTypeNames(){
+        return new ResponseEntity<>(spaceTypeService.getNamesList(), HttpStatus.OK);
     }
 
 

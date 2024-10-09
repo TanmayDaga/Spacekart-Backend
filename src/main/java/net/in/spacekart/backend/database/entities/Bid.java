@@ -1,13 +1,13 @@
 package net.in.spacekart.backend.database.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-
-import java.sql.Timestamp;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,19 +19,34 @@ public class Bid {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    public Bid(Long id) {
+        this.id = id;
+    }
+
+    @Column(unique = true)
+    private String publicId;
+
+
+    @ManyToOne
+    private Proposal proposal;
+
+
+    @ManyToOne
+    private User bidder;
+
+    @ManyToOne
     private Space space;
 
     private String description;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER,orphanRemoval = true)
     private Price price;
 
     @CreationTimestamp
-    private Instant createAt;
+    private OffsetDateTime createAt;
 
     @UpdateTimestamp
-    private Instant updateAt;
+    private OffsetDateTime updateAt;
 
 
 }

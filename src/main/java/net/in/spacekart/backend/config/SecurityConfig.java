@@ -43,10 +43,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(request -> {
-            request.requestMatchers("/signup", "/login","/api/v1/spacetypes","/users").permitAll();
+            request.requestMatchers("api/v1/signup", "api/v1/login", "/api/v1/spacetypes", "/users", "/api/v1/spaces/upload", "/api/v1/spaces","/test","api/username","api/v1/sendOtp","api/v1/verifyOtp","api-docs","api-docs/*","swagger-ui/*").permitAll();
             request.anyRequest().authenticated();
 
         });
+
+
         http.sessionManagement(sessions -> sessions.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
@@ -70,6 +72,9 @@ public class SecurityConfig {
 
     @Bean
     public RoleHierarchy roleHierarchy() {
-    return  RoleHierarchyImpl.fromHierarchy("ROLE_ADMIN > ROLE_STAFF > ROLE_USER > ROLE_GUEST");
+        return RoleHierarchyImpl.fromHierarchy("ROLE_ADMIN > ROLE_STAFF > ROLE_USER > ROLE_GUEST");
     }
+
+
+
 }

@@ -5,7 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import net.in.spacekart.backend.database.entities.User;
+import net.in.spacekart.backend.database.entities.UserAuthentication;
 import net.in.spacekart.backend.services.JwtService;
 import net.in.spacekart.backend.services.entityServices.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +26,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Autowired
     UserService userService;
 
+
+
     public JwtAuthFilter(JwtService jwtService, UserService userService) {
         this.jwtService = jwtService;
     }
@@ -42,7 +44,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 if (c.getName().equals("auth") && c.getValue().startsWith("Bearer")) {
                     token = c.getValue();
                     token = token.substring(6);
-                    username = jwtService.extractUsername(token);
+                    username = jwtService.extractPayload(token);
                 }
             }
         }
@@ -50,14 +52,17 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
 
-            User user = (User) userService.loadUserByUsername(username);
-            if (user!= null && jwtService.validateToken(token, user)) {
+            UserAuthentication user = (UserAuthentication) userService.loadUserByUsername(username);
+            if (user != null && jwtService.validateToken(token, user.getUsername())) {
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
 
         }
+
+        System.out.println(request);
+
         filterChain.doFilter(request, response);
     }
 }

@@ -2,27 +2,21 @@ package net.in.spacekart.backend.database.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.in.spacekart.backend.constraints.AgeLimit;
 import net.in.spacekart.backend.database.enums.Role;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.type.SqlTypes;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.hibernate.annotations.*;
 
-import java.sql.Timestamp;
 import java.time.OffsetDateTime;
-import java.util.Collection;
 import java.util.List;
 
 @NoArgsConstructor
@@ -30,7 +24,8 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+@NamedQuery(name = "User.updateUser", query = "UPDATE User u  SET u.phoneNumber = :phoneNumber, u.emailId = :emailId, u.address.line = :line, u.address.landmark = :landmark, u.address.city = :city, u.address.state = :state, u.address.postalCode = :postalCode, u.birthday = :birthday WHERE u.username = :username")
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,7 +34,7 @@ public class User implements UserDetails {
 
 
     @Column(nullable = false)
-    @NotBlank(message = "First Name cannot be Empty")
+    @NotBlank(message = "FirstName=cannot be Empty")
     private String firstName;
 
 
@@ -52,7 +47,7 @@ public class User implements UserDetails {
     private String phoneNumber;
 
     @Column(nullable = false)
-    @NotBlank(message = "Password cannot be Empty")
+    @NotBlank(message = "Password=cannot be Empty")
     @Size(min = 8, message = "Password must be of minimum 8 characters.")
     private String password;
 
@@ -63,15 +58,26 @@ public class User implements UserDetails {
     @Email(message = "Invalid Email")
     private String emailId;
 
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
-    @Basic(optional = false)
+    @Enumerated(EnumType.STRING)
     private Role role;
 
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
     private List<Space> spaces;
 
-    @OneToOne(cascade = CascadeType.ALL)
+
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "renter", cascade = CascadeType.ALL, orphanRemoval = true)
+    private  List<AllocationTime> allocationTimes;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "bidder", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Bid> bids;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "reviewer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews;
+
+    @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
+    @NotFound(action = NotFoundAction.IGNORE)
     private Media profilePicture;
 
 
@@ -80,41 +86,43 @@ public class User implements UserDetails {
 
 
     @CreationTimestamp
-    private Timestamp createdAt;
+    private OffsetDateTime createdAt;
 
-    @UpdateTimestamp
-    private Timestamp updatedAt;
+    @UpdateTimestamp(source = SourceType.DB)
+    private OffsetDateTime updatedAt;
 
+
+
+
+
+    public User(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    public User(Long id) {
+        this.id = id;
+    }
+
+    public User(Long id, String firstName, String lastName, String username, String phoneNumber, String password, Address address, String emailId, Role role, List<Space> spaces, OffsetDateTime birthday, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.phoneNumber = phoneNumber;
+        this.password = password;
+        this.address = address;
+        this.emailId = emailId;
+        this.role = role;
+        this.spaces = spaces;
+        this.birthday = birthday;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 
     @Override
     public String toString() {
         return firstName + " " + lastName + " " + username + " " + phoneNumber + " " + password + " " + emailId;
-    }
-
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 
 
