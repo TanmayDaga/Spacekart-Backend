@@ -20,9 +20,6 @@
         <querydsl.version>5.0.0</querydsl.version>
 
     </properties>
-
-
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

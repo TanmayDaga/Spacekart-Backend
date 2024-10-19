@@ -78,12 +78,16 @@ public class UserService implements org.springframework.security.core.userdetail
         // Generating user Id
         Long id = userRepository.insertUser(value);
 
-        try {
-            byte[][] array = {userCreateDto.getProfilePicture().getBytes()};
-            mediaService.insertMedia(array, id, MediaService.MediaType.SINGLE_USER_PROFILE_PICTURE);
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        if(userCreateDto.getProfilePicture() != null){
+            try {
+                byte[][] array = {userCreateDto.getProfilePicture().getBytes()};
+                mediaService.insertMedia(array, id, MediaService.MediaType.SINGLE_USER_PROFILE_PICTURE);
+            } catch (Exception ignored) {
+            }
         }
+
+
     }
 
 

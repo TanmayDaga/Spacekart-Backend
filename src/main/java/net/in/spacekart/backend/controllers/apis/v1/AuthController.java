@@ -64,7 +64,6 @@ public class AuthController {
         }
 
         try {
-
             userCreateDto.setPhoneNumber(jwtService.extractPayload(userCreateDto.getPhoneNumber()).substring(3));
             userCreateDto.setEmailId(jwtService.extractPayload(userCreateDto.getEmailId()));
         } catch (Exception e) {
@@ -76,7 +75,7 @@ public class AuthController {
 
 
     @PostMapping(value = "api/v1/sendOtp")
-    public ResponseEntity<?> sendOtp(@RequestBody SendOtpDto otpDto, Authentication authentication) throws SpacekartBaseException {
+    public ResponseEntity<?> sendOtp(@RequestBody SendOtpDto otpDto) throws SpacekartBaseException {
 
         String orderId = otpService.sendOtp(otpDto.getEmailIdOrPhoneNumber(), utilsService.checkEmailIdOrPhoneNumber(otpDto.getEmailIdOrPhoneNumber()));
         if (orderId != null) {
@@ -89,7 +88,7 @@ public class AuthController {
 
 
     @PostMapping("api/v1/verifyOtp")
-    public ResponseEntity<?> verifyOtp(@RequestBody VerifyOtpDto verifyOtpDto, Authentication authentication) throws SpacekartBaseException {
+    public ResponseEntity<?> verifyOtp(@RequestBody VerifyOtpDto verifyOtpDto) throws SpacekartBaseException {
 
         boolean isValid = otpService.verifyOtp(verifyOtpDto.getOrderId(), verifyOtpDto.getOtp(), utilsService.checkEmailIdOrPhoneNumber(verifyOtpDto.getEmailIdOrPhoneNumber()), verifyOtpDto.getEmailIdOrPhoneNumber());
         if (isValid) {
