@@ -39,5 +39,11 @@ public class Media {
         this.id = id;
     }
 
+    public  Media(String url, String publicId, String assetId) {
+        this.url = url;
+        this.publicId = publicId;
+        this.assetId = assetId;
+    }
+
 
 }

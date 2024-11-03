@@ -40,7 +40,7 @@ public class SpaceTypeService {
     public void save(SpaceTypeCreateDto spaceType) {
 
 
-        Long id = spaceTypeRepository.save(SpaceType.builder().name(spaceType.getName()).build());
+        Long id = spaceTypeRepository.saveMy(SpaceType.builder().name(spaceType.getName()).build());
 
         if (spaceType.getImage() != null) {
             try {

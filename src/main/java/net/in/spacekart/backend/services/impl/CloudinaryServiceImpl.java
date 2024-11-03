@@ -14,9 +14,9 @@ import java.util.Map;
 @Service
 public class CloudinaryServiceImpl implements CloudinaryService {
 
-    @Resource
-    private Cloudinary cloudinary;
 
+    @Resource
+    Cloudinary cloudinary;
 
 
 

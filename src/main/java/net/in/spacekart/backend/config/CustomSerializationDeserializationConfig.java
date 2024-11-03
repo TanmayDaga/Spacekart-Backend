@@ -23,13 +23,15 @@ import java.time.format.DateTimeFormatter;
 public class CustomSerializationDeserializationConfig {
 
 
-    @Autowired
-    @Qualifier("getTimeFormatter")
     private DateTimeFormatter timeFormatter;
 
-    @Autowired
-    @Qualifier("getDateTimeFormatter")
     private DateTimeFormatter dateTimeFormatter;
+
+    @Autowired
+    public  CustomSerializationDeserializationConfig(@Qualifier("getTimeFormatter") DateTimeFormatter timeFormatter, @Qualifier("getDateTimeFormatter") DateTimeFormatter dateTimeFormatter) {
+        this.timeFormatter = timeFormatter;
+        this.dateTimeFormatter = dateTimeFormatter;
+    }
 
     @Primary
     @Bean

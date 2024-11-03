@@ -11,14 +11,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class MediaEntityListener {
 
-
-    private final CloudinaryService cloudinaryService;
+    private  final CloudinaryService cloudinaryService;
 
     @Autowired
-    public MediaEntityListener( CloudinaryService cloudinaryService1) {
-
-        this.cloudinaryService = cloudinaryService1;
+    public  MediaEntityListener(CloudinaryService cloudinaryService){
+        this.cloudinaryService = cloudinaryService;
     }
+
 
 
     @PreRemove

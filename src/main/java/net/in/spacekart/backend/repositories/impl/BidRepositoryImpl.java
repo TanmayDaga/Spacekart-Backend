@@ -20,8 +20,12 @@ import java.util.List;
 @Repository
 public class BidRepositoryImpl implements BidRepository {
 
-    @Autowired
     EntityManager em;
+
+    @Autowired
+    public BidRepositoryImpl(EntityManager em) {
+        this.em = em;
+    }
 
     @Transactional
     @Override

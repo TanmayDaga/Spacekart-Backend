@@ -24,13 +24,17 @@ import java.util.List;
 @RequestMapping("/api/v1/spaces")
 public class SpaceController {
 
-    @Autowired
-    SpaceService spaceService;
+    private  final SpaceService spaceService;
+
+    private  MediaService mediaService;
+    private final  UtilsService utilsService;
 
     @Autowired
-    MediaService mediaService;
-    @Autowired
-    private UtilsService utilsService;
+    public  SpaceController(SpaceService spaceService, MediaService mediaService, UtilsService utilsService) {
+        this.spaceService = spaceService;
+        this.mediaService = mediaService;
+        this.utilsService = utilsService;
+    }
 
 
     @PreAuthorize("hasRole('USER')")

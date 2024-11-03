@@ -18,8 +18,12 @@ import java.util.List;
 public class AllocationTimeRepositoryImpl implements AllocationTimeRepository {
 
 
-    @Autowired
     EntityManager em;
+
+    @Autowired
+    public AllocationTimeRepositoryImpl(EntityManager em) {
+        this.em = em;
+    }
 
     @Override
     @Transactional

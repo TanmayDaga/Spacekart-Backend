@@ -16,14 +16,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class ReviewService {
 
-    @Autowired
-    MediaService mediaService;
-    @Autowired
-    private ReviewRepository reviewRepository;
-    @Autowired
-    private UtilsService utilsService;
-    @Autowired
+    private final MediaService mediaService;
+    private final ReviewRepository reviewRepository;
+    private final UtilsService utilsService;
     private MediaRepository mediaRepository;
+
+    @Autowired
+    public  ReviewService(MediaService mediaService, ReviewRepository reviewRepository, UtilsService utilsService) {
+        this.mediaService = mediaService;
+        this.reviewRepository = reviewRepository;
+        this.utilsService = utilsService;
+        this.mediaRepository = mediaRepository;
+    }
 
     public ReviewDetailsDtoPublic getReviewDetailsPublic(String publicId) {
         return reviewRepository.getReviewDetailsPublic(publicId);

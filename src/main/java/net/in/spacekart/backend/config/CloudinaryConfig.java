@@ -11,8 +11,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CloudinaryConfig {
 
-    @Autowired
     Dotenv dotenv;
+
+    @Autowired
+    public CloudinaryConfig(Dotenv dotenv) {
+        this.dotenv = dotenv;
+    }
 
     @Bean
     public Cloudinary cloudinary(){

@@ -32,11 +32,15 @@ import java.util.List;
 public class SpaceRepositoryImpl implements SpaceRepository {
 
 
-    @Autowired
     EntityManager entityManager;
 
-    @Autowired
     SecureRandom secureRandom;
+
+    @Autowired
+    public SpaceRepositoryImpl(EntityManager entityManager,SecureRandom secureRandom) {
+        this.entityManager = entityManager;
+        this.secureRandom = secureRandom;
+    }
 
 
     @Override
