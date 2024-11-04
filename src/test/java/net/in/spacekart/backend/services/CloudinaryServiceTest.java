@@ -1,19 +1,12 @@
 package net.in.spacekart.backend.services;
 
 
-import com.cloudinary.Cloudinary;
-
 import net.in.spacekart.backend.BaseTestConfig;
 import net.in.spacekart.backend.config.CloudinaryConfig;
-import net.in.spacekart.backend.config.IndependentBeansConfig;
-import net.in.spacekart.backend.database.MediaEntityListener;
 import net.in.spacekart.backend.services.impl.CloudinaryServiceImpl;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -24,37 +17,64 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.nio.file.Files;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ContextConfiguration(classes = { TestConfig.class, BaseTestConfig.class})
 @ExtendWith(SpringExtension.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CloudinaryServiceTest {
 
     @Autowired
     CloudinaryService cloudinaryService;
 
-    @Test
-    public void testUpload(){
+    private static Map uploadedFileInfo;
 
-        ClassPathResource resource = new ClassPathResource("image.jpg");
-
+    @BeforeAll
+    static void setUp(@Autowired CloudinaryService cloudinaryService) {
         try {
-            // Convert the resource file to byte array
+            ClassPathResource resource = new ClassPathResource("image.jpg");
             byte[] fileContent = Files.readAllBytes(resource.getFile().toPath());
-            Map result =  cloudinaryService.uploadFile(fileContent, "tests");
-            Assertions.assertNotNull(result.get("public_id"),"public_id is null");
-            Assertions.assertNotNull(result.get("url"),"url is null");
-            Assertions.assertNotNull(result.get("asset_id"),"asset_id is null");
-            assertTrue(result.get("url").toString().startsWith("http"), "URL should start with http");
-
+            uploadedFileInfo = cloudinaryService.uploadFile(fileContent, "tests");
+        } catch (Exception e) {
+            fail("Failed to setup test: " + e.getMessage());
         }
-        catch (Exception e) {
-            e.printStackTrace();
-            Assertions.fail(e.getMessage());
-        }
+    }
 
+    @Test
+    @DisplayName("Verify Upload Result")
+    void verifyUploadResult() {
+        assertAll(
+                () -> assertNotNull(uploadedFileInfo.get("public_id"), "public_id is null"),
+                () -> assertNotNull(uploadedFileInfo.get("url"), "url is null"),
+                () -> assertNotNull(uploadedFileInfo.get("asset_id"), "asset_id is null"),
+                () -> assertTrue(uploadedFileInfo.get("url").toString().startsWith("http"),
+                        "URL should start with http")
+        );
+    }
+
+    @Test
+    @DisplayName("Delete Image")
+    void deleteUploadedFile() {
+        Map response = cloudinaryService.deleteFile(uploadedFileInfo.get("public_id").toString());
+        assertEquals("ok", response.get("result"));
+    }
+
+    @AfterAll
+    static void cleanup(@Autowired CloudinaryService cloudinaryService) {
+        // In case test fails before deletion
+        if (uploadedFileInfo != null && uploadedFileInfo.get("public_id") != null) {
+            try {
+                cloudinaryService.deleteFile(uploadedFileInfo.get("public_id").toString());
+            } catch (Exception e) {
+                System.err.println("Cleanup failed: " + e.getMessage());
+            }
+        }
     }
 }
+
+
+
+
 
 
 @TestConfiguration
