@@ -67,44 +67,34 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Allow the specific origin
+        // Allow all origins for development (adjust for production)
         configuration.setAllowedOrigins(Arrays.asList(
                 "https://www.spacekart.in.net",
-                "https://spacekart.in.net"  // Include without www if needed
+                "https://spacekart.in.net",
+                "http://localhost:3000"  // Add this if you're testing locally
         ));
 
-        // Allow common HTTP methods
         configuration.setAllowedMethods(Arrays.asList(
                 "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"
         ));
 
-        // Allow all headers
         configuration.setAllowedHeaders(Arrays.asList(
-                "Origin",
-                "Content-Type",
-                "Accept",
-                "Authorization",
-                "X-Requested-With",
-                "Access-Control-Request-Method",
-                "Access-Control-Request-Headers",
-                "Access-Control-Allow-Origin",
-                "Access-Control-Allow-Credentials"
-
+                "*"  // Allow all headers for simplicity
         ));
 
+        configuration.setExposedHeaders(Arrays.asList(
+                "Authorization",
+                "Access-Control-Allow-Origin",
+                "Access-Control-Allow-Credentials"
+        ));
 
-
-        // Allow credentials like cookies, authorization headers, etc.
         configuration.setAllowCredentials(true);
-
-        // How long the browser should cache the preflight response (in seconds)
         configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
