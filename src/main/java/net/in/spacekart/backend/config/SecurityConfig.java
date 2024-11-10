@@ -86,15 +86,13 @@ public class SecurityConfig {
                 "Authorization",
                 "X-Requested-With",
                 "Access-Control-Request-Method",
-                "Access-Control-Request-Headers"
+                "Access-Control-Request-Headers",
+                "Access-Control-Allow-Origin",
+                "Access-Control-Allow-Credentials"
+
         ));
 
-        // Expose headers that clients are allowed to access
-        configuration.setExposedHeaders(Arrays.asList(
-                "Access-Control-Allow-Origin",
-                "Access-Control-Allow-Credentials",
-                "Authorization"
-        ));
+
 
         // Allow credentials like cookies, authorization headers, etc.
         configuration.setAllowCredentials(true);
