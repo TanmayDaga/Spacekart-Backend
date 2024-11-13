@@ -29,7 +29,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
             Map result = cloudinary.uploader().destroy(public_id,options);
             return result;
-        } catch (IOException e) {
+    } catch (IOException e) {
             throw new RuntimeException("Error while deleting file "+ e.getMessage());
 
         }
