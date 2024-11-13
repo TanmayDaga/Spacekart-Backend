@@ -57,7 +57,6 @@ public class AuthController {
     }
 
 
-    @CrossOrigin
     @PostMapping(value = "api/v1/signup")
     public ResponseEntity<?> registerUser(@Valid @ModelAttribute UserCreateDto userCreateDto, Authentication authentication) {
         if (authentication != null && authentication.getPrincipal() != null) {
