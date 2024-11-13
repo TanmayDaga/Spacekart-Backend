@@ -25,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -133,6 +134,37 @@ public class AuthController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
+    }
+
+    @PostMapping("api/v1/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            // Clear the security context
+            SecurityContextHolder.clearContext();
+
+            // Get all cookies
+            Cookie[] cookies = request.getCookies();
+
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    // Find and invalidate the auth cookie
+                    if (cookie.getName().equals("auth")) {
+                        // Set max age to 0 to delete the cookie
+                        cookie.setMaxAge(0);
+                        // Set the same path as the original cookie to ensure it's deleted
+                        cookie.setPath("/");
+                        // Add the invalidated cookie to response
+                        response.addCookie(cookie);
+                        break;
+                    }
+                }
+            }
+
+            return new ResponseEntity<>("Logged out successfully", HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>("Logout failed", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
