@@ -50,7 +50,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
         http.authorizeHttpRequests(request -> {
-            request.requestMatchers("api/v1/signup", "api/v1/login", "/api/v1/spacetypes", "/users", "/api/v1/spaces/upload", "/api/v1/spaces","/test","api/username","api/v1/sendOtp","api/v1/verifyOtp","api-docs","api-docs/*","swagger-ui/*").permitAll();
+            request.requestMatchers("api/v1/signup", "api/v1/login", "/api/v1/spacetypes", "/users", "/api/v1/spaces/upload", "/api/v1/spaces","/test","api/username","api/v1/sendOtp","api/v1/verifyOtp","api-docs","api-docs/*","swagger-ui/*","api/v1/logoutMe").permitAll();
             request.anyRequest().authenticated();
 
         });
