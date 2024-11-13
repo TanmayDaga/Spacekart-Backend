@@ -22,18 +22,16 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.AuthenticationException;
 import java.io.IOException;
 
 @RestController
+@RequestMapping("/api")
 public class AuthController {
 
 
@@ -58,7 +56,7 @@ public class AuthController {
     }
 
 
-    @PostMapping(value = "api/v1/signup")
+    @PostMapping(value = "v1/signup")
     public ResponseEntity<?> registerUser(@Valid @ModelAttribute UserCreateDto userCreateDto, Authentication authentication) {
         if (authentication != null && authentication.getPrincipal() != null) {
             return new ResponseEntity<>("Please logout to signin", HttpStatus.UNAUTHORIZED);
@@ -75,7 +73,7 @@ public class AuthController {
     }
 
 
-    @PostMapping(value = "api/v1/sendOtp")
+    @PostMapping(value = "v1/sendOtp")
     public ResponseEntity<?> sendOtp(@RequestBody SendOtpDto otpDto) throws SpacekartBaseException {
 
         String orderId = otpService.sendOtp(otpDto.getEmailIdOrPhoneNumber(), utilsService.checkEmailIdOrPhoneNumber(otpDto.getEmailIdOrPhoneNumber()));
@@ -88,7 +86,7 @@ public class AuthController {
     }
 
 
-    @PostMapping("api/v1/verifyOtp")
+    @PostMapping("v1/verifyOtp")
     public ResponseEntity<?> verifyOtp(@RequestBody VerifyOtpDto verifyOtpDto) throws SpacekartBaseException {
 
         boolean isValid = otpService.verifyOtp(verifyOtpDto.getOrderId(), verifyOtpDto.getOtp(), utilsService.checkEmailIdOrPhoneNumber(verifyOtpDto.getEmailIdOrPhoneNumber()), verifyOtpDto.getEmailIdOrPhoneNumber());
@@ -100,7 +98,7 @@ public class AuthController {
     }
 
 
-    @PostMapping("api/v1/resendOTP")
+    @PostMapping("v1/resendOTP")
     public ResponseEntity<?> resendOTP(@RequestBody ResendOtpDto resendOtpDto) throws SpacekartBaseException {
         String orderId = otpService.resendOTP(resendOtpDto.getOrderId());
         if (orderId != null) {
@@ -110,7 +108,7 @@ public class AuthController {
         return new ResponseEntity<>("Request body invalid", HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("api/v1/login")
+    @PostMapping("v1/login")
     public ResponseEntity<?> AuthenticateAndGetToken(@Valid @ModelAttribute LoginUserDto loginUserDto, HttpServletRequest request, HttpServletResponse response, Authentication authentication1) throws AuthenticationException, IOException {
 
         if (authentication1 != null && authentication1.getPrincipal() != null) {
@@ -136,7 +134,7 @@ public class AuthController {
 
     }
 
-    @PostMapping(value = "api/v1/logout")
+    @PostMapping(value = "v1/logout")
     public ResponseEntity<?> logoutNew(@RequestBody String s) {
         return  new ResponseEntity<>(HttpStatus.OK);
     }
@@ -171,7 +169,7 @@ public class AuthController {
     }
 
 
-    @GetMapping("api/v1/username")
+    @GetMapping("v1/username")
     public ResponseEntity<?> getUserName(Authentication authentication) {
         if (authentication == null) {
             return new ResponseEntity<>(HttpStatus.OK);
