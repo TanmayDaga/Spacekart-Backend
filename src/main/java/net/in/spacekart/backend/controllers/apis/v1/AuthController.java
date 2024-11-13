@@ -137,7 +137,7 @@ public class AuthController {
     }
 
     @PostMapping(value = "api/v1/logout")
-    public ResponseEntity<?> logoutNew(@RequestBody String s, HttpServletRequest request , HttpServletResponse response) {
+    public ResponseEntity<?> logoutNew(@RequestBody String s) {
         return  new ResponseEntity<>(HttpStatus.OK);
     }
 
