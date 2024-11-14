@@ -68,8 +68,7 @@ public class AuthController {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if (cookie.getName().contains("JSESSIONID") ||
-                        cookie.getName().contains("remember-me")) {
+                if (cookie.getName().contains("auth")) {
                     cookie.setValue("");
                     cookie.setPath("/");
                     cookie.setMaxAge(0);
