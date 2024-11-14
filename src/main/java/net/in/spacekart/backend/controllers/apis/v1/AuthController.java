@@ -56,6 +56,11 @@ public class AuthController {
     }
 
 
+    @PostMapping(value = "v1/logout")
+    public ResponseEntity<?> logoutMe(@RequestBody String s, Authentication authentication) {
+        return  new ResponseEntity<String>(HttpStatus.OK);
+    }
+
     @PostMapping(value = "v1/signup")
     public ResponseEntity<?> registerUser(@Valid @ModelAttribute UserCreateDto userCreateDto, Authentication authentication) {
         if (authentication != null && authentication.getPrincipal() != null) {
