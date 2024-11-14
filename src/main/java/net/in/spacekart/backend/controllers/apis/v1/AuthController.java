@@ -25,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.AuthenticationException;
@@ -57,8 +58,30 @@ public class AuthController {
 
 
     @PostMapping(value = "v1/logout")
-    public ResponseEntity<?> logoutMe(@RequestBody String s, Authentication authentication) {
-        return  new ResponseEntity<String>(HttpStatus.OK);
+    public ResponseEntity<?> logoutMe(HttpServletRequest request,
+                                      HttpServletResponse response,
+                                      Authentication authentication) {
+
+
+
+        // Clear auth cookies
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().contains("JSESSIONID") ||
+                        cookie.getName().contains("remember-me")) {
+                    cookie.setValue("");
+                    cookie.setPath("/");
+                    cookie.setMaxAge(0);
+                    response.addCookie(cookie);
+                }
+            }
+        }
+
+        // Clear security context
+        SecurityContextHolder.clearContext();
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping(value = "v1/signup")
