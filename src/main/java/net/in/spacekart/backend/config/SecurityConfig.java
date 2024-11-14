@@ -62,30 +62,32 @@ public class SecurityConfig {
         return http.build();
 
     }
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Allow all origins for development (adjust for production)
-        configuration.setAllowedOrigins(Arrays.asList(
+        // Set allowed origins precisely
+        configuration.setAllowedOrigins(List.of(
                 "https://www.spacekart.in.net",
                 "https://spacekart.in.net"
-
         ));
 
-        configuration.setAllowedMethods(Arrays.asList(
+        configuration.setAllowedMethods(List.of(
                 "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"
         ));
 
-        configuration.setAllowedHeaders(Arrays.asList(
-                "*"  // Allow all headers for simplicity
+        // Be specific about allowed headers
+        configuration.setAllowedHeaders(List.of(
+                "Authorization",
+                "Content-Type",
+                "Accept",
+                "Origin",
+                "X-Requested-With"
         ));
 
-        configuration.setExposedHeaders(Arrays.asList(
-                "Authorization",
-                "Access-Control-Allow-Origin",
-                "Access-Control-Allow-Credentials"
+        // Be specific about exposed headers
+        configuration.setExposedHeaders(List.of(
+                "Authorization"
         ));
 
         configuration.setAllowCredentials(true);
