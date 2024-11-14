@@ -70,8 +70,8 @@ public class SecurityConfig {
         // Allow all origins for development (adjust for production)
         configuration.setAllowedOrigins(Arrays.asList(
                 "https://www.spacekart.in.net",
-                "https://spacekart.in.net",
-                "http://localhost:3000"  // Add this if you're testing locally
+                "https://spacekart.in.net"
+
         ));
 
         configuration.setAllowedMethods(Arrays.asList(
