@@ -61,19 +61,30 @@ public class AuthController {
     public ResponseEntity<?> logoutMe(HttpServletRequest request,
                                       HttpServletResponse response,
                                       Authentication authentication) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("auth")) {
+                    cookie.setValue("");  // Clear the value
+                    cookie.setMaxAge(0); // Expire immediately
+                    cookie.setPath("/");
+                    cookie.setSecure(true);  // If using HTTPS
+                    cookie.setHttpOnly(true);  // Prevent JavaScript access
+                    response.addCookie(cookie);
+                }
+            }
+        }
 
+        // Clear any session attributes if you're using sessions
+        if (request.getSession(false) != null) {
+            request.getSession().invalidate();
+        }
 
-
-        Cookie cookie = new Cookie("auth", null);
-
-        // Set cookie properties to expire it
-        cookie.setMaxAge(0);  // Immediately expire the cookie
-        cookie.setPath("/");  // Must match the path of the original cookie
-
-        // Add the expired cookie to response
-        response.addCookie(cookie);
+        // Clear security context if you're using Spring Security
+        SecurityContextHolder.clearContext();
 
         return new ResponseEntity<>(HttpStatus.OK);
+
     }
 
     @PostMapping(value = "v1/signup")
