@@ -65,9 +65,10 @@ public class AuthController {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("auth")) {
+                    System.out.println(cookie.getValue());
                     cookie.setValue("");  // Clear the value
                     cookie.setMaxAge(0); // Expire immediately
-                    cookie.setPath("/");
+                    cookie.setPath("/api/v1");
                     cookie.setSecure(true);  // If using HTTPS
                     cookie.setHttpOnly(true);  // Prevent JavaScript access
                     response.addCookie(cookie);
@@ -75,10 +76,6 @@ public class AuthController {
             }
         }
 
-        // Clear any session attributes if you're using sessions
-        if (request.getSession(false) != null) {
-            request.getSession().invalidate();
-        }
 
         // Clear security context if you're using Spring Security
         SecurityContextHolder.clearContext();
