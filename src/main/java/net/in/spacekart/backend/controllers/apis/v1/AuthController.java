@@ -134,41 +134,6 @@ public class AuthController {
 
     }
 
-    @PostMapping(value = "v1/logout")
-    public ResponseEntity<?> logoutNew(@RequestBody String s) {
-        return  new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @PostMapping(value =  "api/v1/logoutMe")
-    public ResponseEntity<?> logout(@RequestBody String s,HttpServletRequest request, HttpServletResponse response) {
-        try {
-
-            // Get all cookies
-            Cookie[] cookies = request.getCookies();
-
-            if (cookies != null) {
-                for (Cookie cookie : cookies) {
-                    // Find and invalidate the auth cookie
-                    if (cookie.getName().equals("auth")) {
-                        // Set max age to 0 to delete the cookie
-                        cookie.setMaxAge(0);
-                        // Set the same path as the original cookie to ensure it's deleted
-                        cookie.setPath("/");
-                        // Add the invalidated cookie to response
-                        response.addCookie(cookie);
-                        break;
-                    }
-                }
-            }
-
-            return new ResponseEntity<>("Logged out successfully", HttpStatus.OK);
-
-        } catch (Exception e) {
-            return new ResponseEntity<>("Logout failed", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-
     @GetMapping("v1/username")
     public ResponseEntity<?> getUserName(Authentication authentication) {
         if (authentication == null) {
