@@ -64,21 +64,14 @@ public class AuthController {
 
 
 
-        // Clear auth cookies
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().contains("auth")) {
-                    cookie.setValue("");
-                    cookie.setPath("/");
-                    cookie.setMaxAge(0);
-                    response.addCookie(cookie);
-                }
-            }
-        }
+        Cookie cookie = new Cookie("auth", null);
 
-        // Clear security context
-        SecurityContextHolder.clearContext();
+        // Set cookie properties to expire it
+        cookie.setMaxAge(0);  // Immediately expire the cookie
+        cookie.setPath("/");  // Must match the path of the original cookie
+
+        // Add the expired cookie to response
+        response.addCookie(cookie);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
